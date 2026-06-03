@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Account</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li></li>
+            </ul>
+        </nav>
+        <h1 class="text-center font-bold text-3xl">Simple Bank Account Simulation</h1>
+    </header>
+    <main>
+        <section id="intro" class="w-2xl flex flex-col items-center justify-center  text-center">
+            <div class="border-2 border-blue-500 rounded-2xl m-4 p-4">Welcome to this simple banking simulation app. 
+                Please follow the instructions below to get started. 
+                Obviously no transactions are actually made,
+                 but this does act as if the account was active</div>
+            <div>Either register
+                <span><button id=register-btn class="button">Register</button></span> 
+                or login
+                <span><button id="login-btn" class="button">Login</button></span> 
+            </div>
+        </section>
+        <section id="register-container">
+            <h2>Register Details</h2>
+            <form id="register-form">
+                <label for="title">Title</label>
+                <input type="text" name="title">
+            </form>
+
+        </section>
+        <section id="account">
+
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+    
+</body>
+</html>
