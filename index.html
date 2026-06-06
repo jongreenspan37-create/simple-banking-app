@@ -17,25 +17,48 @@
         <h1 class="text-center font-bold text-3xl">Simple Bank Account Simulation</h1>
     </header>
     <main>
-        <section id="intro" class="w-2xl flex flex-col items-center justify-center  text-center">
-            <div class="border-2 border-blue-500 rounded-2xl m-4 p-4">Welcome to this simple banking simulation app. 
+        <section id="intro" 
+                class="flex flex-col items-center justify-center gap-4">
+            <div class="max-w-sm border-2 border-blue-500 rounded-2xl m-4 p-4">Welcome to this simple banking simulation app. 
                 Please follow the instructions below to get started. 
                 Obviously no transactions are actually made,
                  but this does act as if the account was active</div>
-            <div>Either register
-                <span><button id=register-btn class="button">Register</button></span> 
-                or login
-                <span><button id="login-btn" class="button">Login</button></span> 
+            <div class="flex flex-col md:flex-row gap-4">
+                <button id=register-btn class="btn">Register</button> 
+                <button id="login-btn" class="btn">Login</button> 
             </div>
         </section>
-        <section id="register-container">
+        
+        <section id="register-container" 
+                class="flex flex-col justify-center items-center gap-4">
             <h2>Register Details</h2>
-            <form id="register-form">
+            <form id="register-form" class="max-w-sm bg-blue-500 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4 p-4">               
+                
                 <label for="title">Title</label>
-                <input type="text" name="title">
+                <select  id="title" name="title">
+                    <option value="none" selected disabled>Select an Option</option>
+                    <option value="mr">Mr</option>
+                    <option value="ms">Ms</option>
+                    <option value="mrs">Mrs</option>
+                    <option value="dr">Dr</option>
+                    <option value="Other">Other</option>
+                </select>
+                
+                <label for="first-name">First Name</label>
+                <input type="text" id="first-name" name="first-name">
+                <label for="second-name">Second Name</label>
+                <input type="text" id="second-name" name="second-name">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email">    
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password">
+            
+                <button type="submit" class="btn">Submit</button>
+
             </form>
 
         </section>
+
         <section id="account">
 
         </section>

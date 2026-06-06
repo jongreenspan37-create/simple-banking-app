@@ -1,7 +1,13 @@
-button{
+.btn{
     border-width:1px;
     border-color: blue;
-    color:blue;
-    padding: 1rem 3rem;
+    color: white;
+    background-color: blue;
+    padding: 0.5rem 2rem;
     border-radius: 999px; 
+}
+
+.btn:hover{
+    background-color: white;
+    color: blue;
 }
