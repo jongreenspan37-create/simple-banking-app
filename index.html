@@ -30,12 +30,12 @@
         </section>
         
         <section id="register-container" 
-                class="flex flex-col justify-center items-center gap-4">
-            <h2>Register Details</h2>
-            <form id="register-form" class="max-w-sm bg-blue-500 rounded-lg grid grid-cols-1 md:grid-cols-2 gap-4 p-4">               
+                class="m-4 flex flex-col justify-center items-center gap-4">
+            <h2 class="text-xl font-bold text-blue-700">Register Details</h2>
+            <form id="register-form" class="max-w-sm md:min-w-[600px] bg-blue-500 rounded-lg grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 p-4">               
                 
                 <label for="title">Title</label>
-                <select  id="title" name="title">
+                <select  id="title" name="title" required>
                     <option value="none" selected disabled>Select an Option</option>
                     <option value="mr">Mr</option>
                     <option value="ms">Ms</option>
@@ -45,13 +45,14 @@
                 </select>
                 
                 <label for="first-name">First Name</label>
-                <input type="text" id="first-name" name="first-name">
+                <input type="text" id="first-name" name="first-name" required>
                 <label for="second-name">Second Name</label>
-                <input type="text" id="second-name" name="second-name">
+                <input type="text" id="second-name" name="second-name" required>
                 <label for="email">Email</label>
-                <input type="email" id="email" name="email">    
+                <input type="email" id="email" name="email" required>    
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password">
+                <input type="password" id="password" name="password" required 
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}">
             
                 <button type="submit" class="btn">Submit</button>
 
@@ -59,7 +60,38 @@
 
         </section>
 
-        <section id="account">
+        <section id="login-container" class="m-4 flex flex-col justify-center items-center gap-4">
+            <h2 class="text-xl font-bold text-blue-700">Login Details</h2>
+            <form id="login-form" class="max-w-sm md:min-w-[600px] bg-blue-500 rounded-lg grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 p-4">
+                <label for="email-login">Email</label>
+                <input type="email" id="email-login" name="email-login" required>    
+                <label for="password-login">Password</label>
+                <input type="password" id="password-login" name="password-login" required>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+
+        </section>
+
+        <section id="account-container" class="m-4 p-4">
+            <div id="account-header" class="flex items-center border-t-2 border-b-2 border-blue-500 p-4 gap-4">
+                <div class="bg-red-300">Name</div>
+                <div>Account No</div>
+                <div class="flex-1">Balance</div>
+                <div><button id="withdraw-btn" class="btn">Withdraw</button></div>
+                <div><button id="deposit-btn" class="btn">Deposit</button></div>
+            </div>
+            <table id="transaction-table" class="w-full border-collapse">
+                <thead>
+                    <tr class="border-b-2 border-blue-500">
+                        <th class="text-left p-2">Date</th>
+                        <th class="text-left p-2">Type</th>
+                        <th class="text-left p-2">Amount</th>
+                        
+                    </tr>
+                </thead>
+                <tbody id="transaction-body">
+                    
+                </tbody>
 
         </section>
     </main>

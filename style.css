@@ -11,3 +11,12 @@
     background-color: white;
     color: blue;
 }
+
+#register-form input, 
+#register-form select, 
+#login-form input, 
+#login-form select {
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    width: 100%;
+}
