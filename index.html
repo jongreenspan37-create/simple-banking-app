@@ -6,6 +6,7 @@
     <title>Bank Account</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="app.js" defer></script>
 </head>
 <body>
     <header>
@@ -17,7 +18,7 @@
         <h1 class="text-center font-bold text-3xl">Simple Bank Account Simulation</h1>
     </header>
     <main>
-        <section id="intro" 
+        <section id="intro-container" 
                 class="flex flex-col items-center justify-center gap-4">
             <div class="max-w-sm border-2 border-blue-500 rounded-2xl m-4 p-4">Welcome to this simple banking simulation app. 
                 Please follow the instructions below to get started. 
@@ -30,7 +31,7 @@
         </section>
         
         <section id="register-container" 
-                class="m-4 flex flex-col justify-center items-center gap-4">
+                class="m-4 flex flex-col justify-center items-center gap-4 hidden">
             <h2 class="text-xl font-bold text-blue-700">Register Details</h2>
             <form id="register-form" class="max-w-sm md:min-w-[600px] bg-blue-500 rounded-lg grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 p-4">               
                 
@@ -52,7 +53,9 @@
                 <input type="email" id="email" name="email" required>    
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required 
-                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}">
+                pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+                    title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
+                autocomplete='new-password'">
             
                 <button type="submit" class="btn">Submit</button>
 
@@ -60,7 +63,8 @@
 
         </section>
 
-        <section id="login-container" class="m-4 flex flex-col justify-center items-center gap-4">
+        <section id="login-container" 
+        class="m-4 flex flex-col justify-center items-center gap-4 hidden">
             <h2 class="text-xl font-bold text-blue-700">Login Details</h2>
             <form id="login-form" class="max-w-sm md:min-w-[600px] bg-blue-500 rounded-lg grid grid-cols-1 md:grid-cols-[1fr_2fr] gap-4 p-4">
                 <label for="email-login">Email</label>
@@ -72,14 +76,19 @@
 
         </section>
 
-        <section id="account-container" class="m-4 p-4">
-            <div id="account-header" class="flex items-center border-t-2 border-b-2 border-blue-500 p-4 gap-4">
-                <div class="bg-red-300">Name</div>
-                <div>Account No</div>
-                <div class="flex-1">Balance</div>
-                <div><button id="withdraw-btn" class="btn">Withdraw</button></div>
-                <div><button id="deposit-btn" class="btn">Deposit</button></div>
+        <section id="account-container" class="m-4 p-4 hidden">
+            <div id="account-header" class="flex flex-col-reverse md:flex-row items-center border-t-2 border-b-2 border-blue-500 p-4 gap-4">
+                <div class="flex flex-1 gap-4">
+                    <div class="bg-red-300">Name</div>
+                    <div>Account No</div>
+                    <div>Balance</div>
+                </div>
+                <div class="flex gap-4">
+                    <div><button id="withdraw-btn" class="btn">Withdraw</button></div>
+                    <div><button id="deposit-btn" class="btn">Deposit</button></div>
+                </div>
             </div>
+            
             <table id="transaction-table" class="w-full border-collapse">
                 <thead>
                     <tr class="border-b-2 border-blue-500">
@@ -94,6 +103,27 @@
                 </tbody>
 
         </section>
+
+        <section id="admin-container" class="m-4 hidden">
+                <h2 class="text-xl font-bold text-blue-700">Admin Panel</h2>
+                <table id="admin-table" class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b-2 border-blue-500">
+                            <th class="text-left p-2">Title</th>
+                            <th class="text-left p-2">First Name</th>
+                            <th class="text-left p-2">Last Name</th>
+                            <th class="text-left p-2">Email</th>
+                            <th class="text-left p-2">Password</th>
+                            <th class="text-left p-2">Account No</th>
+                            <th class="text-left p-2">Balance</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody id="admin-body">
+                        
+                    </tbody>
+                </table>
+            </section>
     </main>
     <footer>
 
