@@ -12,6 +12,9 @@ const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const adminBody = document.getElementById('admin-body');
 const messageContainer = document.getElementById('message-container');
+const accountName =document.getElementById('account-name');
+const accountBalance = document.getElementById('account-balance');
+const accountNo = document.getElementById('account-no');
 
 
 // Functions
@@ -93,13 +96,6 @@ registerForm.addEventListener('submit', (e) => {
                 return;
             }
         }
-    
-    
-     
-    
-    
-
-    
     const newAccount = new Account(
         formData.get('title'),
         formData.get('first-name'),
@@ -122,6 +118,14 @@ registerForm.addEventListener('submit', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        document.getElementById('email.login').value='';
+        document.getElementById('password-login').value='';
+        loginForm.reset();
+        registerForm.reset();
+    } , 100);
+    
+    
     loadAccountsList();
     console.log(accountsList);
     accountsList.forEach(account => {
@@ -135,4 +139,25 @@ loginForm.addEventListener('submit', (e) => {
     const formData = new FormData(loginForm);
     const email = formData.get('email-login');
     const password = formData.get('password-login');
+
+    const matchedEmail = accountsList.find(item => item.email === email)
+
+    if (matchedEmail){
+        if (matchedEmail.password === password){
+            loginForm.reset();
+            loginContainer.classList.add('hidden');
+            accountContainer.classList.remove('hidden');
+            accountName.textContent= `Name: ${matchedEmail.firstName} ${matchedEmail.lastName}`;
+            accountNo.textContent= `Account No: ${matchedEmail.accountNo}`;
+            accountBalance.textContent= `Balance: $${matchedEmail.balance.toFixed(2)}`;
+
+        }else{
+            
+            showMessage("Incorrect Details")
+        }
+    }else{ 
+        
+        showMessage("Incorrect Details!");
+
+    }
 });
