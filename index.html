@@ -112,10 +112,17 @@
                     <div id="account-no"></div>
                     <div id="account-balance"></div>
                 </div>
-                <div class="flex gap-4">
-                    <div><button id="withdraw-btn" class="btn">Withdraw</button></div>
-                    <div><button id="deposit-btn" class="btn">Deposit</button></div>
+                <div>
+                    <form id="transaction-form" class="flex gap-2 items-center">
+                        <div><input type="number" id="amount" name="amount" required
+                                placeholder="Amount to withdraw/deposit" 
+                                class="border border-blue-500 rounded-lg p-2"></div>
+                        </div>
+                        <div><button type="submit" name="withdraw-btn" class="btn">Withdraw</button></div>
+                        <div><button type="submit" name="deposit-btn" class="btn">Deposit</button></div>
+                    </form>
                 </div>
+            
             </div>
             
             <table id="transaction-table" class="w-full border-collapse">

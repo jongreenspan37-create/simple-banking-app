@@ -1,6 +1,7 @@
 import {Account} from './account.js';
 
 const accountsList = [];
+let currentAccount = null;
 
 const introContainer = document.getElementById('intro-container');
 const registerBtn = document.getElementById('register-btn');
@@ -15,7 +16,7 @@ const messageContainer = document.getElementById('message-container');
 const accountName =document.getElementById('account-name');
 const accountBalance = document.getElementById('account-balance');
 const accountNo = document.getElementById('account-no');
-
+const transactionForm = document.getElementById('transaction-form');
 
 // Functions
 function saveAccountsList(){
@@ -66,13 +67,41 @@ function writeToAdminTable(account){
     
 }
 
+function showAccountDetails(first,last,account,balance){
+
+    accountName.textContent= "Name: "+ first +"" + last;
+    accountNo.textContent= "Account No: " + account;
+    accountBalance.textContent= "Balance: £" + balance;  
+
+}
+
 // Event Listeners
+
+// Load accounts from localStorage and display them in the admin table
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+        document.getElementById('email.login').value='';
+        document.getElementById('password-login').value='';
+        loginForm.reset();
+        registerForm.reset();
+    } , 100);
+    
+    
+    loadAccountsList();
+    console.log(accountsList);
+    accountsList.forEach(account => {
+        writeToAdminTable(account);
+    });
+});
+
+// Event listener for register button
 registerBtn.addEventListener('click', () => {
     registerContainer.classList.remove('hidden');
     introContainer.classList.add('hidden');
     
 });
 
+// Event listener for login button
 loginBtn.addEventListener('click', () => {
     if (accountsList.length === 0) {
         const newMessage = "No accounts found. Please register first.";
@@ -83,6 +112,7 @@ loginBtn.addEventListener('click', () => {
     introContainer.classList.add('hidden');
 });
 
+// Event listener for register form submission
 registerForm.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(registerForm);
@@ -117,22 +147,9 @@ registerForm.addEventListener('submit', (e) => {
     
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-        document.getElementById('email.login').value='';
-        document.getElementById('password-login').value='';
-        loginForm.reset();
-        registerForm.reset();
-    } , 100);
-    
-    
-    loadAccountsList();
-    console.log(accountsList);
-    accountsList.forEach(account => {
-        writeToAdminTable(account);
-    });
-});
 
+
+// Event listener for login form submission
 loginForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
@@ -142,22 +159,57 @@ loginForm.addEventListener('submit', (e) => {
 
     const matchedEmail = accountsList.find(item => item.email === email)
 
-    if (matchedEmail){
-        if (matchedEmail.password === password){
-            loginForm.reset();
-            loginContainer.classList.add('hidden');
-            accountContainer.classList.remove('hidden');
-            accountName.textContent= `Name: ${matchedEmail.firstName} ${matchedEmail.lastName}`;
-            accountNo.textContent= `Account No: ${matchedEmail.accountNo}`;
-            accountBalance.textContent= `Balance: $${matchedEmail.balance.toFixed(2)}`;
-
-        }else{
-            
-            showMessage("Incorrect Details")
-        }
-    }else{ 
-        
-        showMessage("Incorrect Details!");
-
+    //Check validity of email and password
+    if (!matchedEmail || matchedEmail.password !== password ) {
+         showMessage("Incorrect Details");
+         return;
     }
+    
+    //Set current account to matched email
+    currentAccount = matchedEmail;
+    
+    loginForm.reset();
+            
+    //Hide login form and show account details
+    loginContainer.classList.add('hidden');
+    accountContainer.classList.remove('hidden');
+            
+    //Fill in account details
+
+    showAccountDetails(matchedEmail.firstName, matchedEmail.lastName,matchedEmail.accountNo,matchedEmail.balance)
+         
+        
 });
+
+// Event listener for transaction form submission
+transactionForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const formData = new FormData(transactionForm);
+    const amount = parseFloat(formData.get('amount'));  
+    
+    if (isNaN(amount) || amount <= 0) {
+        showMessage("Please enter a valid amount.");
+        return;
+    }
+    
+     // Identify which button was clicked using e.submitter
+    const clickedButtonName = e.submitter.getAttribute('name');
+
+    if (clickedButtonName === 'deposit-btn') {
+        currentAccount.deposit(amount);
+    } else if (clickedButtonName === 'withdraw-btn') {
+        currentAccount.withdraw(amount);
+    }
+
+
+
+    accountBalance.textContent= getBalance();
+    saveAccountsList();
+    transactionForm.reset();
+
+});
+
+
+
+
+    
