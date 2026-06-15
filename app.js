@@ -8,7 +8,8 @@ const registerBtn = document.getElementById('register-btn');
 const loginBtn = document.getElementById('login-btn');
 const registerContainer = document.getElementById('register-container');
 const loginContainer = document.getElementById('login-container');
-const accountContainer = document.getElementById('account-container');      
+const accountContainer = document.getElementById('account-container');   
+const adminContainer = document.getElementById('admin-container')   
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const adminBody = document.getElementById('admin-body');
@@ -17,6 +18,10 @@ const accountName =document.getElementById('account-name');
 const accountBalance = document.getElementById('account-balance');
 const accountNo = document.getElementById('account-no');
 const transactionForm = document.getElementById('transaction-form');
+const allLinks = document.querySelectorAll('.js-nav-link');
+const allSections = document.querySelectorAll('.js-page-section');
+
+
 
 // Functions
 function saveAccountsList(){
@@ -26,9 +31,27 @@ function saveAccountsList(){
 function loadAccountsList(){
     const storedAccounts = localStorage.getItem('bankAccounts');
     if (storedAccounts) {
-        accountsList.push(...JSON.parse(storedAccounts));
+        const plainObjectsArray = JSON.parse(storedAccounts);
+        
+        // Clear the array to prevent duplicating entries on reload
+        accountsList.length = 0; 
+        
+        // Rebuild each account as a proper instance of your Account class
+        plainObjectsArray.forEach(acc => {
+            const instantiatedAccount = new Account(
+                acc.title,
+                acc.firstName,
+                acc.lastName,
+                acc.email,
+                acc.password,
+                acc.accountNo,
+                acc.balance,
+                acc.transactionHistory
+            );
+            accountsList.push(instantiatedAccount);
+        });
     }
-} 
+}
 
 function showMessage(message){
     messageContainer.textContent = message;
@@ -45,45 +68,44 @@ function writeToAdminTable(account){
 
     const titleCell = document.createElement('td');
     titleCell.textContent = account.title;
+    titleCell.classList = "text-left p-2"
 
     const firstNameCell = document.createElement('td');
     firstNameCell.textContent = account.firstName;
+    firstNameCell.classList = "text-left p-2"
 
     const lastNameCell = document.createElement('td');
     lastNameCell.textContent = account.lastName;
+    lastNameCell.classList = "text-left p-2"
 
     const emailCell = document.createElement('td');
     emailCell.textContent = account.email;
+    emailCell.classList = "text-left p-2"
 
     const accountNoCell = document.createElement('td');
     accountNoCell.textContent = account.accountNo;
+    accountNoCell.classList = "text-left p-2"
 
-    const balanceCell = document.createElement('td');
-    balanceCell.textContent = account.balance;
+    
 
-    row.append(titleCell, firstNameCell, lastNameCell, emailCell, accountNoCell, balanceCell);
+    row.append(titleCell, firstNameCell, lastNameCell, emailCell, accountNoCell);
     adminBody.append(row);
     console.log(adminBody);
     
 }
 
-function showAccountDetails(first,last,account,balance){
 
-    accountName.textContent= "Name: "+ first +"" + last;
-    accountNo.textContent= "Account No: " + account;
-    accountBalance.textContent= "Balance: £" + balance;  
-
-}
-
+//----------------
 // Event Listeners
+//----------------
 
 // Load accounts from localStorage and display them in the admin table
 document.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-        document.getElementById('email.login').value='';
+        document.getElementById('email-login').value='';
         document.getElementById('password-login').value='';
-        loginForm.reset();
-        registerForm.reset();
+        loginForm?.reset();
+        registerForm?.reset();
     } , 100);
     
     
@@ -93,6 +115,24 @@ document.addEventListener('DOMContentLoaded', () => {
         writeToAdminTable(account);
     });
 });
+
+//Nav bar event listners
+
+allLinks.forEach(link =>{
+    link.addEventListener('click',(e)=>{
+        e.preventDefault();
+
+        allSections.forEach(section => section.classList.add('hidden'));
+    
+        const targetId =link.getAttribute('data-target');
+        const targetSection = document.getElementById(targetId);
+
+        targetSection?.classList.remove('hidden');
+        targetSection?.scrollIntoView({behavior : 'smooth'});
+        
+    })
+})
+
 
 // Event listener for register button
 registerBtn.addEventListener('click', () => {
@@ -176,8 +216,9 @@ loginForm.addEventListener('submit', (e) => {
             
     //Fill in account details
 
-    showAccountDetails(matchedEmail.firstName, matchedEmail.lastName,matchedEmail.accountNo,matchedEmail.balance)
-         
+    accountName.textContent = `Name: ${currentAccount.firstName} ${currentAccount.lastName}`;
+    accountNo.textContent = `Account No: ${currentAccount.accountNo}`;
+    accountBalance.textContent = `Balance: £${currentAccount.getBalance().toFixed(2)}`;
         
 });
 
@@ -203,13 +244,9 @@ transactionForm.addEventListener('submit', (e) => {
 
 
 
-    accountBalance.textContent= getBalance();
+    accountBalance.textContent = `Balance: £${currentAccount.getBalance().toFixed(2)}`;
+
     saveAccountsList();
     transactionForm.reset();
 
 });
-
-
-
-
-    
