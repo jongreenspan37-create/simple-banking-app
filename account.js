@@ -12,15 +12,15 @@ export class Account {
 
     deposit(amount) {
         this.balance += amount;
-        this.transactionHistory.push({ type: 'deposit', amount });
+        this.transactionHistory.push({ date: new Date().toLocaleDateString('en-GB'), type: 'Deposit', amount });
     }
 
     withdraw(amount) {
         if (amount <= this.balance) {
             this.balance -= amount;
-            this.transactionHistory.push({ type: 'withdrawal', amount });
+            this.transactionHistory.push({ date: new Date().toLocaleDateString('en-GB'), type: 'Withdrawal', amount });
         } else {
-            console.log("Insufficient funds");
+            return false;
         }
     }
 

@@ -3,6 +3,9 @@ import {Account} from './account.js';
 const accountsList = [];
 let currentAccount = null;
 
+const navBar = document.getElementById('nav-bar');
+
+const logOut = document.getElementById('logout-btn');
 const introContainer = document.getElementById('intro-container');
 const registerBtn = document.getElementById('register-btn');
 const loginBtn = document.getElementById('login-btn');
@@ -18,6 +21,7 @@ const accountName =document.getElementById('account-name');
 const accountBalance = document.getElementById('account-balance');
 const accountNo = document.getElementById('account-no');
 const transactionForm = document.getElementById('transaction-form');
+const transactionTableBody = document.getElementById('transaction-body')
 const allLinks = document.querySelectorAll('.js-nav-link');
 const allSections = document.querySelectorAll('.js-page-section');
 
@@ -94,6 +98,26 @@ function writeToAdminTable(account){
     
 }
 
+function writeToTranactionTable(transaction){
+
+    const row = document.createElement('tr');
+
+    const dateCell = document.createElement('td');
+    dateCell.textContent = transaction.date;
+    dateCell.classList = "text-left p-2"
+
+    const typeCell = document.createElement('td');
+    typeCell.textContent = transaction.type;
+    typeCell.classList = "text-left p-2"
+
+    const amountCell = document.createElement('td');
+    amountCell.textContent = transaction.amount;
+    amountCell.classList = "text-left p-2"
+
+    row.append(dateCell, typeCell, amountCell);
+    transactionTableBody.append(row);
+}
+
 
 //----------------
 // Event Listeners
@@ -112,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAccountsList();
     console.log(accountsList);
     accountsList.forEach(account => {
+       
         writeToAdminTable(account);
     });
 });
@@ -129,9 +154,27 @@ allLinks.forEach(link =>{
 
         targetSection?.classList.remove('hidden');
         targetSection?.scrollIntoView({behavior : 'smooth'});
+
+        navBar.classList.remove('active');
         
     })
 })
+
+//Event listner for hamburger menu
+
+const hamBurger = document.getElementById('hamburger');
+const closeHamburger = document.getElementById('close-hamburger')
+
+
+hamBurger.addEventListener('click', ()=>{
+    
+    navBar.classList.add('active')
+
+});
+
+closeHamburger.addEventListener('click', ()=>{
+    navBar.classList.remove('active')
+});
 
 
 // Event listener for register button
@@ -150,6 +193,7 @@ loginBtn.addEventListener('click', () => {
     }
     loginContainer.classList.remove('hidden');
     introContainer.classList.add('hidden');
+    console.log(accountsList);
 });
 
 // Event listener for register form submission
@@ -177,12 +221,17 @@ registerForm.addEventListener('submit', (e) => {
         []);
         console.log(formData.get('family-name'));
     accountsList.push(newAccount);
+    
     saveAccountsList();
+    
     const newMessage = `Account created successfully! ${newAccount.firstName} ${newAccount.lastName}, Account No: ${newAccount.accountNo}`;
+    
     showMessage(newMessage);
     registerForm.reset();
+    
     registerContainer.classList.add('hidden');
     introContainer.classList.remove('hidden');
+    
     writeToAdminTable(newAccount);
     
 });
@@ -213,12 +262,24 @@ loginForm.addEventListener('submit', (e) => {
     //Hide login form and show account details
     loginContainer.classList.add('hidden');
     accountContainer.classList.remove('hidden');
+    //Also Hide menu and show logout
+    navBar.classList.add('hidden');
+    logOut.classList.remove('hidden');
+
             
     //Fill in account details
-
     accountName.textContent = `Name: ${currentAccount.firstName} ${currentAccount.lastName}`;
     accountNo.textContent = `Account No: ${currentAccount.accountNo}`;
     accountBalance.textContent = `Balance: £${currentAccount.getBalance().toFixed(2)}`;
+
+    //Fill in the past transactions
+    if(transactionTableBody) transactionTableBody.innerHTML='';
+    currentAccount.transactionHistory.forEach(transaction =>{
+
+            writeToTranactionTable(transaction);
+        
+
+    })
         
 });
 
@@ -237,16 +298,59 @@ transactionForm.addEventListener('submit', (e) => {
     const clickedButtonName = e.submitter.getAttribute('name');
 
     if (clickedButtonName === 'deposit-btn') {
+        
         currentAccount.deposit(amount);
+    
     } else if (clickedButtonName === 'withdraw-btn') {
-        currentAccount.withdraw(amount);
+        
+        const success=currentAccount.withdraw(amount);
+
+        if (!success){
+             showMessage("There are insufficient funds for this transaction");
+             
+            }
+
     }
-
-
 
     accountBalance.textContent = `Balance: £${currentAccount.getBalance().toFixed(2)}`;
 
     saveAccountsList();
+    if(transactionTableBody) transactionTableBody.innerHTML='';
+
+    currentAccount.transactionHistory.forEach(transaction =>{
+
+            writeToTranactionTable(transaction);
+    
+        })
+
     transactionForm.reset();
+
+});
+
+//event listner for logout
+logOut.addEventListener('click', ()=>{
+
+    //Cleasr temp array
+    currentAccount= null;
+    
+    //delete header info
+    if (accountName) accountName.textContent = 'Name: ';
+    if (accountNo) accountNo.textContent = 'Account No: ';
+    if (accountBalance) accountBalance.textContent = 'Balance: £0.00';
+    
+    // delete the table info
+    const transactionBody = document.getElementById('transaction-body');
+    if (transactionBody) transactionBody.innerHTML = '';
+    
+    // Hide the account sectiom and show the home view
+    allSections.forEach(section => section.classList.add('hidden')); 
+    introContainer?.classList.remove('hidden');   
+    
+    //show menu
+    navBar.classList.remove('hidden');
+    logOut.classList.add('hidden');
+    
+    
+    showMessage("Logged out successfully.");
 
 });

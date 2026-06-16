@@ -1,3 +1,55 @@
+.nav-bar{
+    margin:2rem;
+    display:flex;
+    justify-content: center;
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: #1d4ed8;
+
+}
+
+.nav-bar.active{
+    left:0;
+}
+
+.nav-ul{
+    padding-bottom: 1.5rem;
+    display:flex;
+    gap:4px;
+}
+
+
+
+.bar{
+    display: block; 
+    width: 25px; 
+    height: 3px; 
+    margin: 5px auto; 
+    
+
+}
+
+@media (max-width:768px){
+
+    .nav-bar{
+        position:fixed;
+        top:0;
+        left:-100%;
+        background-color:#93c5fd ;
+        color:#333;
+        border-radius: 8px;
+        transition: left 0.3s ease-in-out;
+
+    }
+
+    .nav-ul{
+        flex-direction: column;
+        padding:2rem 0.5rem;
+        gap:2rem;
+    }
+
+}
+
 .btn{
     border-width:1px;
     border-color: blue;
