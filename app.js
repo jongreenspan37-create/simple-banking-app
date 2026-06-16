@@ -40,7 +40,7 @@ function loadAccountsList(){
         // Clear the array to prevent duplicating entries on reload
         accountsList.length = 0; 
         
-        // Rebuild each account as a proper instance of your Account class
+        // Rebuild each account as javascript object
         plainObjectsArray.forEach(acc => {
             const instantiatedAccount = new Account(
                 acc.title,
@@ -72,15 +72,15 @@ function writeToAdminTable(account){
 
     const titleCell = document.createElement('td');
     titleCell.textContent = account.title;
-    titleCell.classList = "text-left p-2"
+    titleCell.classList = "hidden md:table-cell text-left p-2"
 
     const firstNameCell = document.createElement('td');
     firstNameCell.textContent = account.firstName;
-    firstNameCell.classList = "text-left p-2"
+    firstNameCell.classList = "hidden md:table-cell text-left p-2"
 
     const lastNameCell = document.createElement('td');
     lastNameCell.textContent = account.lastName;
-    lastNameCell.classList = "text-left p-2"
+    lastNameCell.classList = "hidden md:table-cell text-left p-2"
 
     const emailCell = document.createElement('td');
     emailCell.textContent = account.email;

@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 .nav-bar{
     margin:2rem;
     display:flex;
@@ -71,4 +73,5 @@
     padding: 0.25rem 0.5rem;
     border-radius: 0.25rem;
     width: 100%;
+    background-color: white;
 }
