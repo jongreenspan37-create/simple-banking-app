@@ -263,8 +263,10 @@ loginForm.addEventListener('submit', (e) => {
     loginContainer.classList.add('hidden');
     accountContainer.classList.remove('hidden');
     //Also Hide menu and show logout
-    navBar.classList.add('hidden');
+    navBar.classList.add('!hidden');
+    hamBurger.classList.add('hidden'); // fixes bug where mobile still had menu
     logOut.classList.remove('hidden');
+    console.log(navBar.classList)
 
             
     //Fill in account details
@@ -347,7 +349,8 @@ logOut.addEventListener('click', ()=>{
     introContainer?.classList.remove('hidden');   
     
     //show menu
-    navBar.classList.remove('hidden');
+    navBar.classList.remove('!hidden');
+    hamBurger.classList.remove('hidden')
     logOut.classList.add('hidden');
     
     

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@source "./*.js";
+
 .nav-bar{
     margin:2rem;
     display:flex;
@@ -11,7 +13,7 @@
 }
 
 .nav-bar.active{
-    left:0;
+    transform:translateX(0);
 }
 
 .nav-ul{
@@ -36,11 +38,13 @@
     .nav-bar{
         position:fixed;
         top:0;
-        left:-100%;
+        left:0;
         background-color:#93c5fd ;
         color:#333;
         border-radius: 8px;
-        transition: left 0.3s ease-in-out;
+        
+        transform:translateX(-100%);
+        transition: transform 0.3s ease-in-out;
 
     }
 
