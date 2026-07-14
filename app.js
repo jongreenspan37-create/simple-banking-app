@@ -16,6 +16,7 @@ const adminContainer = document.getElementById('admin-container')
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
 const adminBody = document.getElementById('admin-body');
+const adminHead = document.getElementById('admin-head')
 const messageContainer = document.getElementById('message-container');
 const accountName =document.getElementById('account-name');
 const accountBalance = document.getElementById('account-balance');
@@ -25,7 +26,13 @@ const transactionTableBody = document.getElementById('transaction-body')
 const allLinks = document.querySelectorAll('.js-nav-link');
 const allSections = document.querySelectorAll('.js-page-section');
 
-
+const accountColumns =[
+    { key: 'title', label:'Title', className: "hidden md:table-cell text-left p-2"},
+    { key: 'firstName', label: 'First Name', className: "hidden md:table-cell text-left p-2" },
+    { key: 'lastName',  label: 'Last Name',  className: "hidden md:table-cell text-left p-2" },
+    { key: 'email',     label: 'Email',      className: "text-left p-2" },
+    { key: 'accountNo', label: 'Account No', className: "text-left p-2" },
+    ];
 
 // Functions
 function saveAccountsList(){
@@ -34,11 +41,14 @@ function saveAccountsList(){
 
 function loadAccountsList(){
     const storedAccounts = localStorage.getItem('bankAccounts');
-    if (storedAccounts) {
+    if (!storedAccounts) return console.log("it went here");
+    accountsList.length = 0; 
+    
+    try {
         const plainObjectsArray = JSON.parse(storedAccounts);
         
         // Clear the array to prevent duplicating entries on reload
-        accountsList.length = 0; 
+        
         
         // Rebuild each account as javascript object
         plainObjectsArray.forEach(acc => {
@@ -54,6 +64,9 @@ function loadAccountsList(){
             );
             accountsList.push(instantiatedAccount);
         });
+    } catch (err){
+        showMessage("Account data corrupted and not loaded")
+
     }
 }
 
@@ -65,11 +78,59 @@ function showMessage(message){
     }, 3000);
 }
 
+
+function writeAdminTableHead() {
+    const headRow = document.createElement('tr');
+    headRow.className = "border-b border-blue-500";
+
+    accountColumns.forEach(({ label, className }) => {
+        const th = document.createElement('th');
+        th.textContent = label;
+        th.className = className;
+        headRow.append(th);
+    });
+
+    // extra column for action buttons - no matching account property
+    const actionTh = document.createElement('th');
+    actionTh.className = "text-left p-2";
+    headRow.append(actionTh);
+
+    adminHead.append(headRow);
+}
+
+
+
+
 function writeToAdminTable(account){
-    
     
     const row = document.createElement('tr');
 
+    accountColumns.forEach(({key, className}) =>{
+        const cell = document.createElement('td');
+        cell.textContent= account[key];
+        cell.classList = className;
+        row.append(cell)
+
+    });
+
+    const actionCell = document.createElement('td');
+    actionCell.className = "text-left p-2";
+    // actionCell.append(editButton, deleteButton) etc.
+    row.append(actionCell);
+
+    adminBody.append(row);
+
+}
+
+function renderAdminTable() {
+    loadAccountsList();
+    adminHead.innerHTML = '';
+    adminBody.innerHTML = '';
+    writeAdminTableHead();
+    accountsList.forEach(account => writeToAdminTable(account));
+}
+
+    /*
     const titleCell = document.createElement('td');
     titleCell.textContent = account.title;
     titleCell.classList = "hidden md:table-cell text-left p-2"
@@ -89,14 +150,14 @@ function writeToAdminTable(account){
     const accountNoCell = document.createElement('td');
     accountNoCell.textContent = account.accountNo;
     accountNoCell.classList = "text-left p-2"
-
     
-
+   
     row.append(titleCell, firstNameCell, lastNameCell, emailCell, accountNoCell);
-    adminBody.append(row);
+    */
     
     
-}
+    
+
 
 function writeToTranactionTable(transaction){
 
@@ -140,11 +201,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } , 100);
     
     
-    loadAccountsList();
-    accountsList.forEach(account => {
-       
-        writeToAdminTable(account);
-    });
+    renderAdminTable()
+   
 });
 
 //Nav bar event listners
