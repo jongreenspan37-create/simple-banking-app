@@ -94,7 +94,7 @@ function writeToAdminTable(account){
 
     row.append(titleCell, firstNameCell, lastNameCell, emailCell, accountNoCell);
     adminBody.append(row);
-    console.log(adminBody);
+    
     
 }
 
@@ -118,6 +118,13 @@ function writeToTranactionTable(transaction){
     transactionTableBody.append(row);
 }
 
+async function hashPassword(plainTextPassword) {
+  const data = new TextEncoder().encode(plainTextPassword);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
 
 //----------------
 // Event Listeners
@@ -134,7 +141,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     
     loadAccountsList();
-    console.log(accountsList);
     accountsList.forEach(account => {
        
         writeToAdminTable(account);
@@ -193,11 +199,11 @@ loginBtn.addEventListener('click', () => {
     }
     loginContainer.classList.remove('hidden');
     introContainer.classList.add('hidden');
-    console.log(accountsList);
+    
 });
 
 // Event listener for register form submission
-registerForm.addEventListener('submit', (e) => {
+registerForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const formData = new FormData(registerForm);
     const accountNo = Math.floor(Math.random() * 1000000000);   
@@ -210,16 +216,22 @@ registerForm.addEventListener('submit', (e) => {
                 return;
             }
         }
+
+    const plainTextPassword =formData.get('password');
+    const hashedPassword = await hashPassword(plainTextPassword);;
+
+
+
     const newAccount = new Account(
         formData.get('title'),
         formData.get('first-name'),
         formData.get('last-name'),
         formData.get('email'),
-        formData.get('password'),
+        hashedPassword,
         accountNo,
         0,
         []);
-        console.log(formData.get('family-name'));
+        
     accountsList.push(newAccount);
     
     saveAccountsList();
@@ -239,20 +251,31 @@ registerForm.addEventListener('submit', (e) => {
 
 
 // Event listener for login form submission
-loginForm.addEventListener('submit', (e) => {
+loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     
     const formData = new FormData(loginForm);
     const email = formData.get('email-login');
-    const password = formData.get('password-login');
+    const plainPassword = formData.get('password-login');
 
     const matchedEmail = accountsList.find(item => item.email === email)
 
     //Check validity of email and password
-    if (!matchedEmail || matchedEmail.password !== password ) {
+    if (!matchedEmail) {
          showMessage("Incorrect Details");
          return;
     }
+    
+    const hashedPassword = await hashPassword(plainPassword)
+   
+    const savedPassword = accountsList.find(item => item.password === hashedPassword ) 
+
+    if(!savedPassword){
+        showMessage("Incorrect Details");
+         return;
+
+    }
+    
     
     //Set current account to matched email
     currentAccount = matchedEmail;
@@ -266,7 +289,7 @@ loginForm.addEventListener('submit', (e) => {
     navBar.classList.add('!hidden');
     hamBurger.classList.add('hidden'); // fixes bug where mobile still had menu
     logOut.classList.remove('hidden');
-    console.log(navBar.classList)
+    
 
             
     //Fill in account details

@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../myItolVault"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "myprojects"
+	}
+}

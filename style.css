@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-@source "./*.js";
+@source "./.js";
 
 .nav-bar{
     margin:2rem;
@@ -33,28 +33,7 @@
 
 }
 
-@media (max-width:768px){
 
-    .nav-bar{
-        position:fixed;
-        top:0;
-        left:0;
-        background-color:#93c5fd ;
-        color:#333;
-        border-radius: 8px;
-        
-        transform:translateX(-100%);
-        transition: transform 0.3s ease-in-out;
-
-    }
-
-    .nav-ul{
-        flex-direction: column;
-        padding:2rem 0.5rem;
-        gap:2rem;
-    }
-
-}
 
 .btn{
     border-width:1px;
